@@ -1,23 +1,31 @@
-import logo from './logo.svg';
 import './App.css';
+import React, {useState, useEffect} from 'react';
+import List from './components/List';
+import Loading from './components/Loading'
 
 function App() {
+  const [data, setData] = useState();
+
+  /**
+ * Запрос на получение списка
+ */
+  const getList = () => {
+    console.log('get')
+    fetch(`${process.env.REACT_APP_SERVER_URL}/users.json`)
+    .then(response => response.json())
+    .then(response => setData(response))
+    .then(console.log(data))
+    .catch(err => console.log(err));
+  }
+
+  useEffect(() => {
+    getList()
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className='App'>
+      <List data={data}></List>
+      {/* <Loading></Loading> */}
     </div>
   );
 }
